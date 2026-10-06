@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealLoop - Save Food, Save Money</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- SPLASH SCREEN -->
+<section id="splash" class="screen splash-screen">
+    <div class="logo">🍱</div>
+    <h1>MealLoop</h1>
+    <p>Save Food • Save Money</p>
+</section>
+
+
+<!-- LOGIN -->
+<section id="login" class="screen hidden">
+    <div class="container auth-box">
+        <div class="logo small-logo">🍱</div>
+        <h1>Welcome to MealLoop</h1>
+        <p class="subtitle">Rescue a meal. Make a difference.</p>
+
+        <input type="text" id="name" placeholder="Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="tel" id="phone" placeholder="Phone">
+
+        <button onclick="loginUser()">Login</button>
+
+        <p class="small-text">Don't have an account? Sign up while logging in.</p>
+    </div>
+</section>
+
+
+<!-- HOME -->
+<section id="home" class="screen hidden">
+
+    <header>
+        <div>
+            <div class="brand">🍱 MealLoop</div>
+            <small>Save Food • Save Money</small>
+        </div>
+
+        <button class="impact-btn" onclick="showScreen('impact')">
+            Impact
+        </button>
+    </header>
+
+    <main class="container">
+
+        <div class="welcome">
+            <h2>Hello, <span id="userName">User</span> 👋</h2>
+            <p>Find delicious surplus meals near you.</p>
+        </div>
+
+        <input
+            type="text"
+            id="search"
+            class="search"
+            placeholder="🔍 Search food..."
+            oninput="displayMeals()"
+        >
+
+        <h3>Categories</h3>
+
+        <div class="categories">
+            <button onclick="filterCategory('All')">All</button>
+            <button onclick="filterCategory('Meals')">Meals</button>
+            <button onclick="filterCategory('Snacks')">Snacks</button>
+            <button onclick="filterCategory('Drinks')">Drinks</button>
+        </div>
+
+        <div class="section-title">
+            <h3>Nearby Surplus Meals</h3>
+            <button onclick="showScreen('provider')">+ Add Meal</button>
+        </div>
+
+        <div id="foodList" class="food-list"></div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <button onclick="showScreen('home')">🏠<span>Home</span></button>
+        <button onclick="showCart()">🛒<span>Cart</span></button>
+        <button onclick="showScreen('impact')">🌱<span>Impact</span></button>
+        <button onclick="showScreen('provider')">🏪<span>Provider</span></button>
+    </nav>
+
+</section>
+
+
+<!-- FOOD DETAILS -->
+<section id="details" class="screen hidden">
+
+    <main class="container">
+
+        <button class="back-btn" onclick="showScreen('home')">
+            ← Back
+        </button>
+
+        <div id="foodDetails"></div>
+
+    </main>
+
+</section>
+
+
+<!-- CART -->
+<section id="cart" class="screen hidden">
+
+    <main class="container">
+
+        <button class="back-btn" onclick="showScreen('home')">
+            ← Back
+        </button>
+
+        <h2>🛒 Your Cart</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="total-box">
+            <h3>Total: ₹<span id="cartTotal">0</span></h3>
+            <button onclick="checkout()">Checkout</button>
+        </div>
+
+    </main>
+
+</section>
+
+
+<!-- ORDER CONFIRMATION -->
+<section id="confirmation" class="screen hidden">
+
+    <main class="container confirmation-box">
+
+        <div class="success-icon">✓</div>
+
+        <h1>Order Confirmed!</h1>
+
+        <h2>Your meal has been rescued! ♻️</h2>
+
+        <div class="order-card">
+            <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+            <p><strong>Pickup:</strong> <span id="pickupInfo"></span></p>
+        </div>
+
+        <button onclick="showScreen('home')">
+            Back to Home
+        </button>
+
+    </main>
+
+</section>
+
+
+<!-- PROVIDER PAGE -->
+<section id="provider" class="screen hidden">
+
+    <main class="container">
+
+        <button class="back-btn" onclick="showScreen('home')">
+            ← Back
+        </button>
+
+        <h2>🏪 Provider Page</h2>
+
+        <p class="subtitle">
+            Add surplus food and help reduce food waste.
+        </p>
+
+        <div class="provider-form">
+
+            <label>Food Name</label>
+            <input type="text" id="providerFood" placeholder="Example: Veg Biryani">
+
+            <label>Category</label>
+            <select id="providerCategory">
+                <option>Meals</option>
+                <option>Snacks</option>
+                <option>Drinks</option>
+            </select>
+
+            <label>Quantity</label>
+            <input type="number" id="providerQuantity" placeholder="Example: 10">
+
+            <label>Price</label>
+            <input type="number" id="providerPrice" placeholder="MealLoop price">
+
+            <label>Original Price</label>
+            <input type="number" id="providerOriginalPrice" placeholder="Original price">
+
+            <label>Pickup Time</label>
+            <input type="text" id="providerPickup" placeholder="Example: 7 PM - 8 PM">
+
+            <label>Restaurant / Canteen</label>
+            <input type="text" id="providerRestaurant" placeholder="Restaurant name">
+
+            <button onclick="postMeal()">Post Meal</button>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<!-- IMPACT PAGE -->
+<section id="impact" class="screen hidden">
+
+    <main class="container">
+
+        <button class="back-btn" onclick="showScreen('home')">
+            ← Back
+        </button>
+
+        <h2>🌱 MealLoop Impact</h2>
+
+        <p class="subtitle">
+            Every rescued meal makes a difference.
+        </p>
+
+        <div class="impact-grid">
+
+            <div class="impact-card">
+                <div>🍱</div>
+                <h2 id="mealsRescued">0</h2>
+                <p>Meals Rescued</p>
+            </div>
+
+            <div class="impact-card">
+                <div>♻️</div>
+                <h2 id="foodWaste">0 kg</h2>
+                <p>Food Waste Reduced</p>
+            </div>
+
+            <div class="impact-card">
+                <div>💰</div>
+                <h2 id="moneySaved">₹0</h2>
+                <p>Money Saved</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
